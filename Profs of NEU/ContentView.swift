@@ -6,16 +6,37 @@
 //
 
 import SwiftUI
+import SDWebImageSwiftUI
 
 struct ContentView: View {
+    
+    @State var search = ""
+    @ObservedObject var obs = observer()
+
+
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+        NavigationView {
+//            List(obs.profs) { prof in
+            List {
+                ForEach(self.obs.profs.filter{(self.search.isEmpty ? true : $0.name.localizedCaseInsensitiveContains(self.search))}, id: \.id) { prof in
+                    
+
+                    NavigationLink(destination: ProfDetails(pData: prof)) {
+                        
+                        HStack {
+                            AnimatedImage(url: URL(string: prof.image))
+                                .resizable()
+                                .frame(width: 60, height: 60)
+                                .clipShape(Circle())
+                            
+                            Text(prof.name)
+                        }
+                    }
+                }
+            }
+            .navigationTitle("Profs of NEU")
+            .searchable(text: $search)
         }
-        .padding()
     }
 }
 
@@ -24,3 +45,4 @@ struct ContentView_Previews: PreviewProvider {
         ContentView()
     }
 }
+
