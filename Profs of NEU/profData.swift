@@ -12,5 +12,6 @@ struct profData: Identifiable {
     var name: String
     var image: String
     var about: String
-    // add more based on requirement
+    var subjects: [String]
+    var comments: [String]
 }
